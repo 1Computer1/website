@@ -5,21 +5,34 @@ created_at: "2019/07/27"
 title: Iterative vs Functional array helpers
 ---
 
--- placeholder --
+This article assumes that you are comfortable with the very basics of JavaScript arrays, and how they differ to objects.
 
-## find
+## Getting a specific element using `find()`
+
+It's not rare to need to look for some specific element based on a criteria. `find()` makes this particularly easy. It takes a function, taking a few arguments:
+
+- current item
+- index of current item
+- original array reference
+
+If that function evaluates to truthy, this item is returned, and the loop ends.
+
+If you're only interested in the presence of an element, consider using `some()`, which instead returns a boolean.
+
+Conventionally, in an iterative approach, this would be done using a preset variable, and looping through our array.
 
 ```js
+// given our data
 const users = [
   { name: "Joe", age: 25 },
   { name: "John", age: 17 },
   { name: "Jane", age: 16 },
 ]
-```
 
-Iterative way:
+// functional way
+const foundUser = users.find(user => user.name === "John")
 
-```js
+// iterative way
 let foundUser = null
 users.forEach(user => {
   if (user.name === "John") {
@@ -28,25 +41,32 @@ users.forEach(user => {
 })
 ```
 
-Functional way:
+## Keep specific items using `filter()`
+
+`filter()` makes it easy to keep specific items based on a criteria.
+
+It takes a function, taking a few arguments:
+
+- current item
+- index of current item
+- original array reference
+
+If that function evaluates to truthy, this specific item is kept, otherwise it is removed.
+
+`filter()` does not modify (mutate) the original array, instead, it returns a new one.
 
 ```js
-const foundUser = users.find(user => user.name === "John")
-```
-
-## filter
-
-```js
+// given our data
 const users = [
   { name: "Joe", age: 25 },
   { name: "John", age: 17 },
   { name: "Jane", age: 16 },
 ]
-```
 
-Iterative way:
+// functional way
+const youngerUsers = users.filter(user => user.age < 18)
 
-```js
+// iterative way
 const youngerUsers = []
 users.forEach(user => {
   if (user.age < 18) {
@@ -55,63 +75,67 @@ users.forEach(user => {
 })
 ```
 
-Functional way:
+## Modifying all elements of an array using `.map()`
+
+It's common to want to modify every element of an array with some logic, and `map()` makes this easy.
+
+It takes a function, taking a few arguments:
+
+- current item
+- index of current item
+- original array reference (rarely used)
+- current reference to `this` (rarely used)
 
 ```js
-const youngerUsers = users.filter(user => user.age < 18)
-```
-
-## map
-
-```js
+// given our data
 const users = [
   { name: "Joe", age: 25 },
   { name: "John", age: 17 },
   { name: "Jane", age: 16 },
 ]
-```
 
-Iterative way:
+// functional way
+const userNames = users.map(user => user.name)
 
-```js
+// iterative way
 const userNames = []
 users.forEach(user => {
   userNames.push(user.name)
 })
 ```
 
-Functional way:
+## Running custom logic using an array using `.reduce()`
+
+`reduce()` is often less understood, but it's not that complicated once you get the basics. Itself, it takes 2 arguments, a function, and an initial value. The function takes a few arguments:
+
+- accumulator, that is a reference to the current value that was last returned, or the initial value
+- current value, the currently looped element
+- current index
+- original array
 
 ```js
-const userNames = users.map(user => user.name)
-```
-
-## reduce
-
-```js
+// given our data
 const users = [
   { name: "Joe", age: 25 },
   { name: "John", age: 17 },
   { name: "Jane", age: 16 },
 ]
-```
 
-Iterative way:
+// functional way
+const totalAge = users.reduce((acc, user) => acc + user.age, 0)
 
-```js
+// iterative way
 let totalAge = 0
 users.forEach(user => {
   totalAge += user.age
 })
 ```
 
-Functional way:
+## Checking if any element matches a condition with `some()`
 
-```js
-const totalAge = users.reduce((acc, user) => acc + user.age, 0)
-```
+`some()` is very similar to `find()`, except it returns a boolean on a match.
 
-## some
+Conventionally, we would prepare some variable with a value of false, loop over all of the elements, and exit the loop once we find a match.
 
 ```js
 const users = [
